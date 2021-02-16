@@ -1,5 +1,4 @@
 // global WebSocket 
-import $ from 'jquery';
 
 var jlab = jlab || {};
 jlab.epics2web = jlab.epics2web || {};
