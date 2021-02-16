@@ -1,4 +1,5 @@
-/* global WebSocket */
+// global WebSocket 
+import $ from 'jquery';
 
 var jlab = jlab || {};
 jlab.epics2web = jlab.epics2web || {};
@@ -132,7 +133,7 @@ jlab.epics2web.ClientConnection = function (options) {
     // Public functions
     this.open = function () {
         if (socket === null || socket.readyState === WebSocket.CLOSED) {
-            var event = new CustomEvent('connecting');
+            let event = new CustomEvent('connecting');
             eventElem.dispatchEvent(event);
 
             let u = this.url;
@@ -143,19 +144,19 @@ jlab.epics2web.ClientConnection = function (options) {
 
             socket = new WebSocket(u);
 
-            socket.onerror = function (event) {
+            socket.onerror = function (_event) {
                 console.log("server connection error");
-                console.log(event);
+                console.log(_event);
 
-                var event = new CustomEvent('error');
+                let event = new CustomEvent('error');
                 eventElem.dispatchEvent(event);
             };
 
-            socket.onclose = function (event) {
+            socket.onclose = function (_event) {
                 console.log("server connection closed");
-                console.log(event.reason);
+                console.log(_event.reason);
 
-                var event = new CustomEvent('close');
+                let event = new CustomEvent('close');
                 eventElem.dispatchEvent(event);
 
                 if (livenessTimer !== null) {
@@ -177,7 +178,7 @@ jlab.epics2web.ClientConnection = function (options) {
                 }
             };
 
-            socket.onmessage = function (event) {
+            socket.onmessage = function (_event) {
                 /*console.log(event.data);*/
 
                 if (livenessTimer !== null) {
@@ -186,27 +187,27 @@ jlab.epics2web.ClientConnection = function (options) {
                 }
 
                 lastUpdated = new Date();
-                var json = JSON.parse(event.data);
+                var json = JSON.parse(_event.data);
                 json.date = lastUpdated;
                 if (json.type === 'update') {
-                    var event = new CustomEvent('update', {'detail': json});
+                    let event = new CustomEvent('update', {'detail': json});
                     eventElem.dispatchEvent(event);
                 } else if (json.type === 'info') {
-                    var event = new CustomEvent('info', {'detail': json});
+                    let event = new CustomEvent('info', {'detail': json});
                     eventElem.dispatchEvent(event);
                 } else if (json.type === 'pong') {
-                    var event = new CustomEvent('pong');
+                    let event = new CustomEvent('pong');
                     eventElem.dispatchEvent(event);
                 }
 
-                var event = new CustomEvent('message');
+                let event = new CustomEvent('message');
                 eventElem.dispatchEvent(event, {'detail': json});
             };
 
-            socket.onopen = function (event) {
+            socket.onopen = function () {
                 lastUpdated = new Date();
 
-                var event = new CustomEvent('open');
+                let event = new CustomEvent('open');
                 eventElem.dispatchEvent(event);
             };
         } else {
@@ -268,17 +269,17 @@ jlab.epics2web.ClientConnection = function (options) {
     };
 
     if (this.autoDisplayClasses === true) {
-        eventElem.addEventListener('connecting', function (event) {
+        eventElem.addEventListener('connecting', function () {
             $(".ws-disconnected").hide();
             $(".ws-connected").hide();
             $(".ws-connecting").show();
         });
-        eventElem.addEventListener('open', function (event) {
+        eventElem.addEventListener('open', function () {
             $(".ws-disconnected").hide();
             $(".ws-connected").show();
             $(".ws-connecting").hide();
         });
-        eventElem.addEventListener('close', function (event) {
+        eventElem.addEventListener('close', function () {
             $(".ws-disconnected").show();
             $(".ws-connected").hide();
             $(".ws-connecting").hide();
@@ -321,3 +322,7 @@ jlab.epics2web.isNumericEpicsType = function (datatype) {
 
     return isNumeric;
 };
+
+export {
+    jlab
+}
