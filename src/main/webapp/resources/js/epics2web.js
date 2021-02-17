@@ -269,19 +269,19 @@ jlab.epics2web.ClientConnection = function (options) {
 
     if (this.autoDisplayClasses === true) {
         eventElem.addEventListener('connecting', function () {
-            $(".ws-disconnected").hide();
-            $(".ws-connected").hide();
-            $(".ws-connecting").show();
+            document.getElementsByClassName('ws-disconnected')[0].style.display = 'none';
+            document.getElementsByClassName('ws-connected')[0].style.display = 'none';
+            document.getElementsByClassName('ws-connecting')[0].style.display = 'block';
         });
         eventElem.addEventListener('open', function () {
-            $(".ws-disconnected").hide();
-            $(".ws-connected").show();
-            $(".ws-connecting").hide();
+            document.getElementsByClassName("ws-disconnected")[0].style.display = 'none';
+            document.getElementsByClassName("ws-connected")[0].style.display = 'block';
+            document.getElementsByClassName("ws-connecting")[0].style.display = 'none';
         });
         eventElem.addEventListener('close', function () {
-            $(".ws-disconnected").show();
-            $(".ws-connected").hide();
-            $(".ws-connecting").hide();
+            document.getElementsByClassName("ws-disconnected")[0]style.display = 'block';
+            document.getElementsByClassName("ws-connected")[0].style.display = 'none';
+            document.getElementsByClassName("ws-connecting")[0].style.display = 'none';;
         });
     }
 
@@ -325,3 +325,4 @@ jlab.epics2web.isNumericEpicsType = function (datatype) {
 export {
     jlab
 }
+
